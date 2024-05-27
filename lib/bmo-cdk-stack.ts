@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { DbTier } from './db-tier';
 import { AppTier } from './app-tier';
+import { WebTier } from './web-tier'
 
 export class BmoCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -10,6 +11,7 @@ export class BmoCdkStack extends cdk.Stack {
     // Instantiate each tier
     const dbTier = new DbTier(this, 'DbTier');
     const appTier = new AppTier(this, 'AppTier', { vpc: dbTier.vpc, dbCluster: dbTier.dbCluster });
+    new WebTier(this, 'WebTier', { vpc: dbTier.vpc, service: appTier.service });
 
   }
 }
